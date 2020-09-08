@@ -1,0 +1,67 @@
+.yandex {
+	position: absolute;
+	top: 20%;
+	left: 10%;
+	z-index: -1;
+}
+
+.yandex-button {
+	position: absolute;
+	left: 62%;
+}
+
+.google {
+	position: absolute;
+	float: left;
+	top: 20%;
+	left: 30%;
+	z-index: -2;
+}
+
+.google-button {
+	position: absolute;
+	left: 62%;
+}
+
+.bing {
+	position: absolute;
+	float: right;
+	float: left;
+	top: 50%;
+	left: 30%;
+	z-index: -5;
+}
+
+.yahoo {
+	position: absolute;
+	float: right;
+	top: 20%;
+	left: 50%;
+	z-index: -6;
+}
+
+.mail {
+	position: absolute;
+	float: right;
+	top: 50%;
+	left: 10%;
+	z-index: -2;
+}
+
+.mail-button {
+	position: absolute;
+	left: 62%;
+
+}
+
+.bing-button {
+	position: absolute;
+	left: 62%;
+}
+
+.yahoo-button {
+	position: absolute;
+	left: 62%;
+}
+
+
