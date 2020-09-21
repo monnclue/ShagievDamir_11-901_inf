@@ -29,14 +29,17 @@ public class DriversDao {
 
     public Optional<Driver> findById(Long id) throws SQLException {
         Statement statementDriver = connection.createStatement();
-        ResultSet drivers = statementDriver.executeQuery("select id from driver");
+        ResultSet drivers = statementDriver.executeQuery(
+                String.format("select * from driver where id = %d", id));
 
         if(!drivers.next()) {
             return  Optional.empty();
         }
 
         Statement statementCar = connection.createStatement();
-        ResultSet cars = statementCar.executeQuery("select driver_id from car");
+        ResultSet cars = statementCar.executeQuery(
+                String.format("select * from car where driver_id = %d",
+                        id));
         ArrayList<Car> carsList = new ArrayList<>();
 
         while (cars.next()) {
