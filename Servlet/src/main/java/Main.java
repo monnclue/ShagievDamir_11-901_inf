@@ -1,3 +1,4 @@
+import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 
 public class Main {
@@ -9,10 +10,6 @@ public class Main {
         Connection connection =
                 DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
 
-        Statement statement = connection.createStatement();
-        ResultSet result = statement.executeQuery("select * from test");
-        while (result.next()) {
-            System.out.println(result.getInt("id"));
-        }
+
     }
 }
