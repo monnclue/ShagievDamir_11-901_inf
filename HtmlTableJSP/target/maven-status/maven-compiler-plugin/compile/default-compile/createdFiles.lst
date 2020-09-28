@@ -1,3 +1,6 @@
+dao/UserDB.class
+Main.class
 dao/User$UserBuilder.class
-dao/User.class
 ru/itis/servlets/Servlet.class
+dao/UserDB$UserDBBuilder.class
+dao/User.class
