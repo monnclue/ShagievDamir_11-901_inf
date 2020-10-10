@@ -1,6 +1,7 @@
 /Users/kellyss/IdeaProjects/HtmlTableJSP/src/main/java/dao/UserDB.java
 /Users/kellyss/IdeaProjects/HtmlTableJSP/src/main/java/ru/itis/repositories/UsersCookieTaskImpl.java
 /Users/kellyss/IdeaProjects/HtmlTableJSP/src/main/java/ru/itis/models/User.java
+/Users/kellyss/IdeaProjects/HtmlTableJSP/src/main/java/ru/itis/servlets/LogOutServlet.java
 /Users/kellyss/IdeaProjects/HtmlTableJSP/src/main/java/ru/itis/repositories/SimpleJdbcTemplate.java
 /Users/kellyss/IdeaProjects/HtmlTableJSP/src/main/java/ru/itis/models/UserForCookieTask.java
 /Users/kellyss/IdeaProjects/HtmlTableJSP/src/main/java/ru/itis/repositories/UsersRepository.java
@@ -10,11 +11,11 @@
 /Users/kellyss/IdeaProjects/HtmlTableJSP/src/main/java/dao/User.java
 /Users/kellyss/IdeaProjects/HtmlTableJSP/src/main/java/repositories/CrudRepository.java
 /Users/kellyss/IdeaProjects/HtmlTableJSP/src/main/java/Main.java
-/Users/kellyss/IdeaProjects/HtmlTableJSP/src/main/java/ru/itis/repositories/LoginTemplate.java
 /Users/kellyss/IdeaProjects/HtmlTableJSP/src/main/java/ru/itis/repositories/CrudRepository.java
 /Users/kellyss/IdeaProjects/HtmlTableJSP/src/main/java/ru/itis/servlets/TestCookieServlet.java
 /Users/kellyss/IdeaProjects/HtmlTableJSP/src/main/java/ru/itis/repositories/RowMapper.java
 /Users/kellyss/IdeaProjects/HtmlTableJSP/src/main/java/ru/itis/servlets/SignInServlet.java
+/Users/kellyss/IdeaProjects/HtmlTableJSP/src/main/java/ru/itis/repositories/AuthorizationTemplate.java
 /Users/kellyss/IdeaProjects/HtmlTableJSP/src/main/java/ru/itis/servlets/SimpleHtmlServlet.java
 /Users/kellyss/IdeaProjects/HtmlTableJSP/src/main/java/ru/itis/repositories/UsersCookieTaskRepository.java
 /Users/kellyss/IdeaProjects/HtmlTableJSP/src/main/java/ru/itis/servlets/UsersServlet.java

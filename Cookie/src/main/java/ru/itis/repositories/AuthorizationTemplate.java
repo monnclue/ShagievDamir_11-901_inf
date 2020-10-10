@@ -7,18 +7,19 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.UUID;
 
-public class LoginTemplate {
+public class AuthorizationTemplate {
     private Connection connection;
     private UsersCookieTaskRepository usersRepository;
 
-    public LoginTemplate(Connection connection) {
+    public AuthorizationTemplate(Connection connection) {
         this.connection = connection;
         usersRepository = new UsersCookieTaskImpl(connection);
     }
 
-    public Cookie getCookie(String log, String pas) throws SQLException {
+    public Cookie getCookieForUser(String log, String pas) throws SQLException {
         UserForCookieTask user = null;
         Cookie cookie = null;
         user = usersRepository.findByLogin(log).get(0);
@@ -32,6 +33,13 @@ public class LoginTemplate {
 
 
         return cookie;
+    }
+
+    public void deleteUUIDForUser(String uuid) throws SQLException {
+        List<UserForCookieTask> users = usersRepository.findByUUID(uuid);
+        UserForCookieTask user = users.get(0);
+        user.setUuid(null);
+        setUUID(user);
     }
 
     private void setUUID(UserForCookieTask user) throws SQLException {

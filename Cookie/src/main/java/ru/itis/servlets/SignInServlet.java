@@ -8,12 +8,7 @@ package ru.itis.servlets;
  * @version v1.0
  */
 
-import ru.itis.models.User;
-import ru.itis.models.UserForCookieTask;
-import ru.itis.repositories.LoginTemplate;
-import ru.itis.repositories.UsersCookieTaskImpl;
-import ru.itis.repositories.UsersCookieTaskRepository;
-import ru.itis.repositories.UsersRepositoryJdbcImpl;
+import ru.itis.repositories.AuthorizationTemplate;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,10 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.UUID;
 
 /**
  * На GET-запрос предоставлять страницу для входа
@@ -66,9 +58,10 @@ public class SignInServlet extends HttpServlet {
             if (mycookie == null) {
                 Connection connection =
                         DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-                LoginTemplate loginTemplate = new LoginTemplate(connection);
-                resp.addCookie(loginTemplate.getCookie(req.getParameter("login"),
-                        req.getParameter("password")));
+                AuthorizationTemplate authorizationTemplate = new AuthorizationTemplate(connection);
+                Cookie cookie = authorizationTemplate.getCookieForUser(req.getParameter("login"),
+                        req.getParameter("password"));
+                resp.addCookie(cookie);
             }
             resp.sendRedirect("/account");
         } catch (SQLException throwables) {

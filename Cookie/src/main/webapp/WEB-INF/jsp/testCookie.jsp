@@ -14,5 +14,9 @@
 <h1>Hello, ${cookie.get("myCookie").value}</h1>
 </body>
 
+<form action="/logout" method="POST">
+    <br/><input type="submit" value="Log out">
+</form>
+
 </html>
 
