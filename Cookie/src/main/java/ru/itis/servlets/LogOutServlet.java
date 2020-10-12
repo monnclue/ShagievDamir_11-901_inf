@@ -24,12 +24,13 @@ public class LogOutServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
        Cookie[] cookies = req.getCookies();
        String uuid = null;
-       for (Cookie cookie : cookies) {
-           if(cookie.getName().equals("myCookie")) {
-               uuid = cookie.getValue();
-               cookie.setMaxAge(0);
-           }
-       }
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("myCookie")) {
+                uuid = cookie.getValue();
+                cookie.setMaxAge(0);
+                resp.addCookie(cookie);
+            }
+        }
 
        try {
            Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);

@@ -1,4 +1,4 @@
-<%--
+<%@ page import="ru.itis.models.UserForCookieTask" %><%--
   Created by IntelliJ IDEA.
   User: kellyss
   Date: 07/10/2020
@@ -11,7 +11,10 @@
     <title>Title</title>
 </head>
 <body>
-<h1>Hello, ${cookie.get("myCookie").value}</h1>
+<h1>Hello,
+    <%  UserForCookieTask user = (UserForCookieTask) request.getAttribute("user");%>
+    <%=user.getLogin()%>
+</h1>
 </body>
 
 <form action="/logout" method="POST">

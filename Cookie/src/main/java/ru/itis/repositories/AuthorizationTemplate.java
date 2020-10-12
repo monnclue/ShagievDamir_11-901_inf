@@ -23,6 +23,7 @@ public class AuthorizationTemplate {
         UserForCookieTask user = null;
         Cookie cookie = null;
         user = usersRepository.findByLogin(log).get(0);
+        System.out.println(user.getUuid());
         if (user.getPassword().equals(pas)) {
             if (user.getUuid() == null) {
                 user.setUuid(UUID.randomUUID().toString());
@@ -39,7 +40,7 @@ public class AuthorizationTemplate {
         List<UserForCookieTask> users = usersRepository.findByUUID(uuid);
         UserForCookieTask user = users.get(0);
         user.setUuid(null);
-        setUUID(user);
+        //setUUID(user);
     }
 
     private void setUUID(UserForCookieTask user) throws SQLException {
