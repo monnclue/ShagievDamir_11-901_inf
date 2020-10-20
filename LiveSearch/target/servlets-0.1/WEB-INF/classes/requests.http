@@ -1,0 +1,7 @@
+POST http://localhost:8080/ajax
+Content-Type: application/json
+
+{
+  "firstName" : "Artyom",
+  "lastName" : "Kondratyev"
+}

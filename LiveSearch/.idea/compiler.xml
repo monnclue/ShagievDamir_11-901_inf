@@ -7,9 +7,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="Cookie" />
-        <module name="HtmlTableJSP" />
+        <module name="servlets" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="servlets" target="8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

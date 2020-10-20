@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script
+            src="https://code.jquery.com/jquery-3.5.1.js"
+            integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<script>
+    function renderText(users, table) {
+        let innerHtml = '<p>\n' +
+            '            </p>';
+
+        for (let i = 0; i < users.length; i++) {
+            innerHtml += '<tr>';
+            innerHtml += '  <td>' + users[i]['firstName'] + '</td>';
+            innerHtml += '  <td>' + users[i]['lastName'] +  '</td>';
+            innerHtml += '</tr>';
+        }
+        table.html(innerHtml);
+    }
+
+    function sendReq(firstName) {
+
+        let data = {
+            "firstName": firstName
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/ajaxsearch",
+            data: JSON.stringify(data),
+            success: function (response) {
+                renderText(response, $('#table'))
+            },
+            dataType: "json",
+            contentType: "application/json"
+        });
+    }
+</script>
+<div>
+    <input onkeyup="sendReq($('#first_name').val())" type="text" id="first_name">
+</div>
+<div>
+    <table id="table">
+
+    </table>
+</div>
+</body>
+</html>
