@@ -1,0 +1,26 @@
+
+#categoriesId {
+    font-size: 20px;
+}
+#search-textId {
+    font-size: 20px;
+}
+select {
+    cursor: pointer;
+}
+
+.align-catselect {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.link a {
+    display: block;
+    text-align: center;
+    height: 100%;
+    color: #666;
+}
+
+option:first-child{
+    display:none;
+}

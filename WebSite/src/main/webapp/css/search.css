@@ -1,0 +1,14 @@
+.content-search-window {
+    height: 80px;
+    max-height: 0;
+    overflow: hidden;
+    padding: 0 18px;
+    transition: max-height;
+    transition-duration: 0.5s;
+    transition-timing-function: ease;
+    background-color: #ffffff;
+}
+
+.input-search-field {
+    width: 150%;
+}
