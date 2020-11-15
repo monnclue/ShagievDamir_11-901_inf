@@ -17,6 +17,7 @@
     <link rel="stylesheet" type="text/css" href="../../css/shop.css"/>
     <link rel="stylesheet" type="text/css" href="../../css/sty.css"/>
     <link rel="stylesheet" type="text/css" href="../../css/search.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/night.css"/>
 
     <script
             src="https://code.jquery.com/jquery-3.5.1.js"
@@ -25,7 +26,7 @@
 
 
 </head>
-<body>
+<body class="dark-mode" id="body">
 <div id="search-windowId" class="color-search-window content-search-window ">
 
 </div>
@@ -53,7 +54,7 @@
                         <a class="dropdown-item" onclick="sendReqCat('Pants')" href="#">Штаны</a>
                     </div>
                 </li>
-                <li class="nav-item ">
+                <li class="nav-item">
                     <a class="nav-link" id="profile-button" href="/profile">Мой профиль<span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
@@ -65,14 +66,14 @@
                        class="form-control form-control-lg align-search-box" id="search-input-field"
                        type="search" placeholder="Search" aria-label="Search">
             </form>
+            <a class="nav-link pointer_cursor" id="switch-mode">
+                <img class="moonSize" src="../../images/night-mode_icon.svg" alt="change mode">
+            </a>
 
         </div>
 
     </nav>
 
-    <form id="addToCartID" class="form-inline my-2 my-lg-0">
-        <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Удалить из корзины</button>
-    </form>
 
 
     <table id="categories_box">
@@ -88,8 +89,9 @@
 
 
 
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous">
 
+</script>
 
 <script>
     function clearSearchWindow(products) {
@@ -120,8 +122,8 @@
                 '           </a> </td>\n' +
                 '            <td>\n' +
                 '                <div class="filters__img">\n' +
-                '                    <div><b>' + products[i]['name'] + '</b></div>\n' +
-                '                    <div>' + products[i]['description'] + '</div>\n' +
+                '                    <div class="name-fontSize"><b>' + products[i]['name'] + '</b></div>\n' +
+                '                    <div>' + products[i]['description'] + '</div><br>\n' +
                 '                    <div>' + products[i]['price'] + 'р.</div>\n' +
                 '                </div>\n' +
                 '            </td>\n' +
@@ -187,7 +189,6 @@
     }
 </script>
 
-
 <script>
     function clear(table) {
         let clearHtml = '';
@@ -221,7 +222,54 @@
     });
 </script>
 
+<script>
+    <%
+        boolean night;
+        Boolean mode = (Boolean) request.getSession().getAttribute("night-mode");
+        if( mode == null)  {
+            System.out.println("there");
+            night = false;
+        } else {
+            System.out.println("th");
+            night = mode;
+        }
+    %>
+    let night = <%=night%>;
+    console.log(night);
 
+    function toggleMode() {
+        let body = document.getElementsByTagName("body").item(0);
+        if (night) body.classList.add('dark-mode');
+        else body.classList.remove('dark-mode');
+    }
+
+    toggleMode();
+
+    $('#switch-mode')
+    .click(function () {
+        document.getElementsByTagName("body").item(0).classList.toggle('dark-mode');
+        night = !night;
+        changeMode();
+    })
+
+    function changeMode() {
+
+        let data = {
+        "night" : night
+        }
+        $.ajax({
+            type: "POST",
+            url: "/mode",
+            data: JSON.stringify(data),
+            success: function (response) {
+                night = !response;
+            },
+            dataType: "json",
+            contentType: "application/json"
+        });
+
+    }
+</script>
 
 
 <!-- вдруг понадобится -->

@@ -24,3 +24,11 @@ select {
 option:first-child{
     display:none;
 }
+
+.name-fontSize {
+    font-size: 30px;
+}
+
+#categories_box {
+    margin-top: 20px;
+}

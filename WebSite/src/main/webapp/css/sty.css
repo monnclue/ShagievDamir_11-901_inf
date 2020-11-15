@@ -24,11 +24,26 @@ TH {
     height: 100%;
 }
 
-.filters__img_big img {
+
+.filters__img_small {
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    margin: 10px;
+}
+
+.filters__img_small img {
     width: initial;
     height: 100%;
 }
 
+.filters__img_big img {
+    width: initial;
+    height: 100%;
+}
+.moonSize {
+    height: 20px;
+}
 .filters__img_big {
     width: 300px;
     height: 300px;

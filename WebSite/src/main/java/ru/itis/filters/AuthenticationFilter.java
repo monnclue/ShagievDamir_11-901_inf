@@ -35,6 +35,10 @@ public class AuthenticationFilter implements Filter {
         Boolean isRequestOnProductPage = request.getRequestURI().startsWith("/product");
         // это css?
         Boolean isCss = request.getRequestURI().endsWith(".css");
+        // svg?
+        Boolean isSVG = request.getRequestURI().endsWith(".svg");
+        // mode?
+        Boolean isRequestMode = request.getRequestURI().startsWith("/mode");
         // идет ли запрос на главную страницу?
         Boolean isRequestOnShopPage = request.getRequestURI().startsWith("/shop");
         // идет ли запрос на signIn signUp?
@@ -42,7 +46,7 @@ public class AuthenticationFilter implements Filter {
                 request.getRequestURI().equals("/signUp");
         // идет ли запрос на открытую страницу?
         Boolean isRequestOnOpenPage = isRequestOnAuthPage|| isRequestOnProductPage
-                || isRequestOnShopPage || isCss;
+                || isRequestOnShopPage|| isRequestMode || isCss || isSVG;
         // идет ли запрос на админ страницу?
         Boolean isRequestOnAdminPage = request.getRequestURI().equals("/admin");
 

@@ -13,6 +13,7 @@
 <head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="../../css/sty.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/product.css"/>
     <title>     <%=product.getName()%>
     </title>
 </head>
@@ -43,11 +44,19 @@
 
 </nav>
 
+<div>
 <div id="image-box" class="filters__img_big imageBorder">
     <img class="imageBorder" src="<%=product.getImageURL()%>" alt="<%=product.getName()%>">
 </div>
 <div id="name" >
     <%=product.getName()%>
+</div>
+<div id="price">
+    <%=product.getPrice()%>
+</div>
+<div id="description">
+    <%=product.getDescription()%>
+</div>
 </div>
 <script>
     function ifAuthenticated(flag) {

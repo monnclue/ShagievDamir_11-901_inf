@@ -1,0 +1,13 @@
+.dark-mode {
+    filter: invert(85%);
+    background-color: #3a3a3a;
+}
+
+.dark-mode img{
+    filter: invert(100%);
+}
+
+.dark-mode #categories_box{
+    color:black
+}
+
