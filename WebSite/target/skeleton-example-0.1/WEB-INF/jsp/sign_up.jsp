@@ -32,5 +32,7 @@
 
     <button type="submit" class="btn btn-secondary">Создать аккаунт</button>
 </form>
+Уже зарегистрированы?
+<a class="nav-link"href="/signIn">Войти</a>
 </body>
 </html>

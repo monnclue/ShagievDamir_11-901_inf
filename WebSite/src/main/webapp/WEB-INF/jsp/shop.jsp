@@ -32,7 +32,6 @@
 </div>
 <%
     NavbarJSPFiller navbarJSPFiller = new NavbarJSPFiller(request);
-    navbarJSPFiller.insertButtonActionSignOrBasket();
 %>
 <div id="allWoSearch">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -57,8 +56,11 @@
                 <li class="nav-item">
                     <a class="nav-link" id="profile-button" href="/profile">Мой профиль<span class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="<%=navbarJSPFiller.getAction()%>"><%=navbarJSPFiller.getButton()%></a>
+                <li class="nav-item" id="cart-button">
+                    <a class="nav-link" href="/cart">Корзина</a>
+                </li>
+                <li class="nav-item" id="signUp-button">
+                    <a class="nav-link" href="/signUp">Войти</a>
                 </li>
             </ul>
             <form id="foc" class="my-2 my-lg-0">
@@ -73,6 +75,7 @@
         </div>
 
     </nav>
+
 
 
 
@@ -200,6 +203,9 @@
     function ifAuthenticated(flag) {
         if (!flag) {
             document.getElementById("profile-button").remove();
+            document.getElementById("cart-button").remove();
+        } else {
+            document.getElementById("signUp-button").remove();
         }
     }
     ifAuthenticated(<%=navbarJSPFiller.isAuthenticated()%>)
@@ -270,6 +276,7 @@
 
     }
 </script>
+
 
 
 <!-- вдруг понадобится -->

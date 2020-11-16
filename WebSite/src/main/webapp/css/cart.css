@@ -1,0 +1,51 @@
+.filters__cart {
+    width: fit-content;
+    height: 100px;
+    overflow: hidden;
+    margin: 10px;
+}
+
+.button__delete {
+    width: 300px;
+    position: relative;
+    left: 100px;
+}
+.input-promo {
+    width: 150px;
+    left: 10px;
+    position: relative;
+}
+
+.text-10left{
+    position: relative;
+    left: 10px;
+}
+
+.button-position {
+    position: relative;
+    top: -38px;
+    left: 170px;
+}
+
+.button-position_order {
+    position: relative;
+    top: -30px;
+    left: 170px;
+}
+
+.cart-products-box {
+    border: 8px solid white;
+    background: aliceblue;
+}
+
+.form-promo{
+    position: relative;
+    left: 66%;
+    top: -13%;
+}
+
+.align-order-box {
+    position: relative;
+    left: 66%;
+    top: -13%;
+}

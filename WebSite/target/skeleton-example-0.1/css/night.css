@@ -11,3 +11,11 @@
     color:black
 }
 
+.dark-mode #catTrId{
+    background-color: #f9f0f0;
+}
+
+.table-border-radius {
+    border-radius: 4px;
+    overflow: hidden;
+}

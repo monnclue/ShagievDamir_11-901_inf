@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="../../css/sty.css"/>
     <link rel="stylesheet" type="text/css" href="../../css/night.css"/>
-
+    <link rel="stylesheet" type="text/css" href="../../css/cart.css"/>
 
     <script
             src="https://code.jquery.com/jquery-3.5.1.js"
@@ -61,57 +61,64 @@
 
 
     <div class="box" id="productList">
-        <%
-            int price = 0;
-            List<ProductForCart> products = (List<ProductForCart>) request.getAttribute("products");
-            for (ProductForCart product : products) {
-                price += product.getPrice();
-        %>
-        <tr>
-            <td>
-                <div class="filters__img_small"><img src="<%=product.getImageURL()%>" alt="<%=product.getName()%>">
-                </div>
-            </td>
-            <td>
-                <div class="filters__img_small">
-                    <div>"<%=product.getName()%>"</div>
-                    <div>Размер: <b><%=product.getSize()%>
-                    </b></div>
-                    <div><%=product.getPrice()%>р.</div>
-                </div>
+        <table class="table-border-radius">
+            <%
+                int price = 0;
+                List<ProductForCart> products = (List<ProductForCart>) request.getAttribute("products");
+                for (ProductForCart product : products) {
+                    price += product.getPrice();
+            %>
+            <tr id="catTrId" class="cart-products-box">
+                <td>
+                    <div class="filters__img_small imageBorder"><img class="imageBorder" src="<%=product.getImageURL()%>" alt="<%=product.getName()%>">
+                    </div>
+                </td>
+                <td>
+                    <div class="filters__cart">
+                        <div class="name-fontSize"><b><%=product.getName()%></b></div>
+                        <div>Размер: <b><%=product.getSize()%>
+                        </b></div>
+                        <div><%=product.getPrice()%>р.</div>
+                    </div>
+                </td>
+                <td>
+                    <form id="deleteFromCartID" class="form-inline my-2 my-lg-0 button__delete" >
+                        <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Удалить из корзины</button>
+                    </form>
+                </td>
+            </tr>
 
-            </td>
-            <td>
-                <form id="deleteFromCartID" class="form-inline my-2 my-lg-0" >
-                    <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Удалить из корзины</button>
-                </form>
-            </td>
-        </tr>
-        <%
-            }
-        %>
+            <%
+                }
+            %>
+        </table>
     </div>
 
 
-    <form action="/promo" method="post">
+
+
+    <form action="/promo" class="form-promo" method="post">
         <div class="form-group">
-        <label class="red" for="exampleFormControlInput1">  Промокод</label>
-        <input class="form-control uppercase" id="exampleFormControlInput1" placeholder=" ">
-        <button type="submit" class="btn btn-secondary">Применить</button>
+        <label class="red text-10left" for="exampleFormControlInput1">  Промокод</label>
+        <input class="form-control uppercase input-promo" id="exampleFormControlInput1" placeholder=" ">
+        <button type="submit" class="btn btn-outline-dark button-position">Применить</button>
         </div>
     </form>
 
-    <div>
-        <h5>    К оплате: </h5>
-        <%=price%> р.
+    <div class="align-order-box">
+        <div class="text-10left">
+            <b>К оплате:  </b> <%=price%> р.
+        </div>
+        <form action="/order" method="POST">
+            <button class="btn btn-outline-dark  button-position_order">Оформить заказ</button>
+        </form>
     </div>
 
 
 
 
-    <form action="/order" method="POST">
-        <button class="btn btn-secondary">Оформить заказ</button>
-    </form>
+
+
 
 
 
@@ -125,10 +132,8 @@
             boolean night;
             Boolean mode = (Boolean) request.getSession().getAttribute("night-mode");
             if( mode == null)  {
-                System.out.println("there");
                 night = false;
             } else {
-                System.out.println("th");
                 night = mode;
             }
         %>
@@ -171,22 +176,26 @@
     </script>
 
     <script>
-        function clearSearchWindow(products) {
+        function clearSearchWindow() {
             document.getElementById("search-windowId").innerHTML = '';
         }
 
-        function renderSearchWindow(products) {
+        function renderSearchWindow() {
             clearSearchWindow(products);
             if (products != null) {
                 let searchWindow = document.getElementById("search-windowId");
                 let br = '<br>';
+                let div = '<div class="art-products-box">';
+                let divClose = '</div>';
 
                 for (let i = 0; i < products.length; i++) {
                     console.log(products[i]['name'])
+                    searchWindow.insertAdjacentHTML('afterbegin',divClose);
                     searchWindow.insertAdjacentHTML('afterbegin',br);
                     searchWindow.insertAdjacentText('afterbegin',products[i]['description']);
                     searchWindow.insertAdjacentText('afterbegin','. ');
                     searchWindow.insertAdjacentText('afterbegin',products[i]['name']);
+                    searchWindow.insertAdjacentHTML('afterbegin',div)
                 }
             }
 
