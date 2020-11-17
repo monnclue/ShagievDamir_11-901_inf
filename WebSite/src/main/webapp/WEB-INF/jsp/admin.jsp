@@ -3,7 +3,9 @@
 <%@ page import="ru.itis.repositories.ProductsRepositoryJdbcTemplateImpl" %>
 <%@ page import="ru.itis.services.ProductService" %>
 <%@ page import="java.util.List" %>
-<%@ page import="ru.itis.models.Product" %><%--
+<%@ page import="ru.itis.models.Product" %>
+<%@ page import="ru.itis.services.AdminService" %>
+<%@ page import="ru.itis.models.ProductSize" %><%--
   Created by IntelliJ IDEA.
   User: kellyss
   Date: 02/11/2020
@@ -103,6 +105,8 @@
         <th>type</th>
         <th>description</th>
         <th>price</th>
+        <th>sizes</th>
+        <th>edit size count</th>
         <th>delete</th>
     </tr>
 
@@ -130,6 +134,33 @@
             </td>
             <td>
                 <%=products.get(i).getPrice()%>р.
+            </td>
+            <td>
+                <%AdminService adminService = (AdminService) request.getAttribute("admin");
+                    List<ProductSize> productSizes = adminService.getProductsSizes(products.get(i));
+                    for (ProductSize productSize : productSizes) {
+                %>
+                    <%=productSize.getSize()%> : <%=productSize.getCount()%>
+                <%
+                    }
+                %>
+
+            </td>
+            <td>
+                <form action="/admin?action=addsize&id=<%=products.get(i).getId()%>" method="post">
+                    <p>Добавить размер</p>
+                    <label>
+                        <input name="count" type="number">
+                        <select multiple size="4" name="size">
+                            <option value="XS">XS</option>
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                        </select>
+                        <button type="submit" class="btn btn-secondary"> Ок </button>
+                    </label>
+                </form>
             </td>
             <td>
                 <form action="/admin?action=delete?id=<%=products.get(i).getId()%>" method="post">

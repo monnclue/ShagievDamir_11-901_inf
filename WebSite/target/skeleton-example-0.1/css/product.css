@@ -1,6 +1,9 @@
-.align-name {
+.align-text-product {
     position: absolute;
     top: 72px;
     left: 350px;
-    font-size: 30px;
+}
+
+.select-size-product {
+    width: 200px;
 }

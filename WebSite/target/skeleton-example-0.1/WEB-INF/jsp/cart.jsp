@@ -1,8 +1,8 @@
 <%@ page import="ru.itis.models.Product" %>
 <%@ page import="java.util.List" %>
 <%@ page import="ru.itis.models.ProductForCart" %>
-<%@ page import="ru.itis.jspFillers.NavbarJSPFiller" %>
-<%@ page import="ru.itis.jspFillers.NavbarJSPFiller" %><%--
+<%@ page import="ru.itis.jspFillers.JSPFiller" %>
+<%@ page import="ru.itis.jspFillers.JSPFiller" %><%--
   Created by IntelliJ IDEA.
   User: kellyss
   Date: 02/11/2020
@@ -24,11 +24,53 @@
             integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
             crossorigin="anonymous"></script>
 </head>
-<body>
+<body class="body-filter">
+<script>
+    <%
+        boolean night;
+        Boolean mode = (Boolean) request.getSession().getAttribute("night-mode");
+        if( mode == null)  {
+            night = false;
+        } else {
+            night = mode;
+        }
+    %>
+    let night = <%=night%>;
+    console.log(night);
+
+    function toggleMode() {
+        let body = document.getElementsByTagName("body").item(0);
+        if (night) body.classList.add('dark-mode');
+        else body.classList.remove('dark-mode');
+
+    }
+
+    toggleMode();
+
+
+    function changeMode() {
+
+        let data = {
+            "night" : night
+        }
+        $.ajax({
+            type: "POST",
+            url: "/mode",
+            data: JSON.stringify(data),
+            success: function (response) {
+                night = !response;
+            },
+            dataType: "json",
+            contentType: "application/json"
+        });
+
+    }
+</script>
+
 
     <%
-        NavbarJSPFiller navbarJSPFiller = new NavbarJSPFiller(request);
-        navbarJSPFiller.isAuthenticated();
+        JSPFiller JSPFiller = new JSPFiller(request);
+        JSPFiller.isAuthenticated();
     %>
 
     <div id="search-windowId" class="color-search-window content-search-window ">
@@ -60,8 +102,8 @@
     </nav>
 
 
-    <div class="box" id="productList">
-        <table class="table-border-radius">
+    <div class="box center" id="productList">
+        <table id="cartTable" class="table-border-radius align-table">
             <%
                 int price = 0;
                 List<ProductForCart> products = (List<ProductForCart>) request.getAttribute("products");
@@ -74,7 +116,7 @@
                     </div>
                 </td>
                 <td>
-                    <div class="filters__cart">
+                    <div class="filters__cart_td">
                         <div class="name-fontSize"><b><%=product.getName()%></b></div>
                         <div>Размер: <b><%=product.getSize()%>
                         </b></div>
@@ -94,25 +136,69 @@
         </table>
     </div>
 
-
-
-
-    <form action="/promo" class="form-promo" method="post">
+<div id="right-block" class="address-block center">
+    <div id="addresses-box" class="align-input_cart">
+        <h3 class="text-10left"><b>Адрес</b></h3>
         <div class="form-group">
-        <label class="red text-10left" for="exampleFormControlInput1">  Промокод</label>
-        <input class="form-control uppercase input-promo" id="exampleFormControlInput1" placeholder=" ">
-        <button type="submit" class="btn btn-outline-dark button-position">Применить</button>
+            <label id="addresses-label" onmouseover="showAddresses()" class="text-10left" for="addresses">Сохраненные адреса</label>
+            <div id="select-box">
+
+            </div>
+
         </div>
-    </form>
+
+        <form action="/promo" class="form-promo" method="post">
+            <div class="form-group">
+                <label class="red text-10left" for="nameInput">Имя</label>
+                <input class="form-control select-size" id="nameInput" placeholder=" ">
+                <label class="red text-10left" for="surnameInput">Фамилия</label>
+                <input class="form-control select-size" id="surnameInput" placeholder=" ">
+                <label class="red text-10left" for="countryInput">Страна</label>
+                <input class="form-control select-size" id="countryInput" placeholder=" ">
+                <label class="red text-10left" for="cityInput">Город</label>
+                <input class="form-control select-size" id="cityInput" placeholder=" ">
+                <label class="red text-10left" for="addressInput">Адрес</label>
+                <input class="form-control select-size" id="addressInput" placeholder=" ">
+                <label class="red text-10left" for="postCodeInput">Почтовый код</label>
+                <input class="form-control select-size" id="postCodeInput" placeholder=" ">
+                <label class="red text-10left" for="phoneNumInput">Номер телефона</label>
+                <input class="form-control select-size" id="phoneNumInput" placeholder=" ">
+                <button type="submit" class="btn btn-outline-dark button-address">Подтвердить</button>
+            </div>
+        </form>
+
+        <form action="/address?action=save" class="align-button-addAddress" method="post">
+            <button type="submit" class="btn btn-outline-dark button-address">Добавить в сохраненные</button>
+        </form>
+
+
+
+    </div>
+
 
     <div class="align-order-box">
-        <div class="text-10left">
-            <b>К оплате:  </b> <%=price%> р.
+        <div class="form-group">
+            <label class="text-10left" for="shipping"><h3><b>Вариант доставки</b></h3></label>
+            <select size="2" onchange="setShip(this.value)" multiple class="form-control select-size" id="shipping">
+                <option value="kazan">Самовывоз в г.Казань – 0р.</option>
+                <option value="pochta">Почта России – 300р.</option>
+            </select>
         </div>
+        <div class="text-10left">
+            <h3> <b> К оплате: <%=price%> р.</b></h3>
+        </div>
+        <form action="/promo" class="form-promo" method="post">
+            <div class="form-group">
+                <label class="red text-10left" for="exampleFormControlInput1">  Промокод</label>
+                <input class="form-control uppercase input-promo" id="exampleFormControlInput1" placeholder=" ">
+                <button type="submit" class="btn btn-outline-dark button-position">Применить</button>
+            </div>
+        </form>
         <form action="/order" method="POST">
             <button class="btn btn-outline-dark  button-position_order">Оформить заказ</button>
         </form>
     </div>
+</div>
 
 
 
@@ -127,60 +213,13 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous">
     </script>
 
-    <script>
-        <%
-            boolean night;
-            Boolean mode = (Boolean) request.getSession().getAttribute("night-mode");
-            if( mode == null)  {
-                night = false;
-            } else {
-                night = mode;
-            }
-        %>
-        let night = <%=night%>;
-        console.log(night);
-
-        function toggleMode() {
-            let body = document.getElementsByTagName("body").item(0);
-            if (night) body.classList.add('dark-mode');
-            else body.classList.remove('dark-mode');
-
-        }
-
-        toggleMode();
-
-        $('#switch-mode')
-            .click(function () {
-                document.getElementsByTagName("body").item(0).classList.toggle('dark-mode');
-                night = !night;
-                changeMode();
-            })
-
-        function changeMode() {
-
-            let data = {
-                "night" : night
-            }
-            $.ajax({
-                type: "POST",
-                url: "/mode",
-                data: JSON.stringify(data),
-                success: function (response) {
-                    night = !response;
-                },
-                dataType: "json",
-                contentType: "application/json"
-            });
-
-        }
-    </script>
 
     <script>
         function clearSearchWindow() {
             document.getElementById("search-windowId").innerHTML = '';
         }
 
-        function renderSearchWindow() {
+        function renderSearchWindow(products) {
             clearSearchWindow(products);
             if (products != null) {
                 let searchWindow = document.getElementById("search-windowId");
@@ -221,5 +260,67 @@
             });
         }
     </script>
+
+    <script>
+        let price = 0;
+        function getPrice() {
+            document.getElementById("priceField").innerText = price + <%=price%>;
+        }
+
+
+        function editPrice(value) {
+            price = value;
+        }
+    </script>
+    <script>
+        let shippingMethod;
+
+        function setShip(value) {
+            shippingMethod = value;
+            ship_price = 0;
+            if (shippingMethod === 'pochta') {
+                ship_price = 300;
+                editPrice(ship_price);
+            }
+            if (shippingMethod === 'kazan') {
+                if (ship_price === 300) {
+                    editPrice(-300)
+                } else {
+                    editPrice(0)
+                }
+            }
+            getPrice();
+
+        }
+
+        function setAddress(value) {
+            console.log(value);
+        }
+    </script>
+
+    <script>
+        function showAddresses() {
+            console.log("show")
+            document.getElementById('select-box').innerHTML = '<select size="2" onchange="setAddress(this.value)" onfocusout="hideAddresses()" multiple class="form-control select-size" id="addresses">\n' +
+                '                <option>Нет сохраненных адресов</option>\n' +
+
+                '            </select>'
+            document.getElementById('addresses').focus();
+        }
+        function hideAddresses() {
+            console.log("hide")
+            document.getElementById('addresses').remove();
+        }
+
+    </script>
+
+    <script>
+    $('#switch-mode')
+        .click(function () {
+            document.getElementsByTagName("body").item(0).classList.toggle('dark-mode');
+            changeMode();
+        })
+
+</script>
 </body>
 </html>

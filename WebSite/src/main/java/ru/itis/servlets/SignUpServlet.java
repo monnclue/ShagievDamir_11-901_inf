@@ -58,7 +58,6 @@ public class SignUpServlet extends HttpServlet {
 
         String message = checkingService.incorrectInput(form);
 
-        System.out.println(message);
         if (message != null) {
             HttpSession session = req.getSession();
             session.setAttribute("message", message);

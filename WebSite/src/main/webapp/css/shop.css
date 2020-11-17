@@ -28,3 +28,7 @@ option:first-child{
 #categories_box {
     margin-top: 20px;
 }
+
+.auto-complete {
+    position: relative;
+}

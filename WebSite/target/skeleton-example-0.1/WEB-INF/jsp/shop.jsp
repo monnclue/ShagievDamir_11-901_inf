@@ -1,8 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="ru.itis.jspFillers.NavbarJSPFiller" %>
+<%@ page import="ru.itis.jspFillers.JSPFiller" %>
 <%@ page import="ru.itis.models.Product" %>
 <%@ page import="java.util.List" %>
-<%@ page import="ru.itis.jspFillers.NavbarJSPFiller" %><%--
+<%@ page import="ru.itis.jspFillers.JSPFiller" %><%--
   Created by IntelliJ IDEA.
   User: kellyss
   Date: 02/11/2020
@@ -27,16 +27,55 @@
 
 </head>
 <body class="dark-mode" id="body">
-<div id="search-windowId" class="color-search-window content-search-window ">
+<script>
+    <%
+        boolean night;
+        Boolean mode = (Boolean) request.getSession().getAttribute("night-mode");
+        if( mode == null)  {
+            night = false;
+        } else {
+            night = mode;
+        }
+    %>
+    let night = <%=night%>;
+    console.log(night);
 
-</div>
+    function toggleMode() {
+        let body = document.getElementsByTagName("body").item(0);
+        if (night) body.classList.add('dark-mode');
+        else body.classList.remove('dark-mode');
+    }
+
+    toggleMode();
+
+    function changeMode() {
+
+        let data = {
+            "night" : night
+        }
+        $.ajax({
+            type: "POST",
+            url: "/mode",
+            data: JSON.stringify(data),
+            success: function (response) {
+                night = !response;
+            },
+            dataType: "json",
+            contentType: "application/json"
+        });
+
+    }
+
+
+</script>
+
 <%
-    NavbarJSPFiller navbarJSPFiller = new NavbarJSPFiller(request);
+    JSPFiller JSPFiller = new JSPFiller(request);
 %>
 <div id="allWoSearch">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="${pageContext.request.contextPath}/shop">AWESOME SHOP</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" id="burger" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -63,11 +102,18 @@
                     <a class="nav-link" href="/signUp">Войти</a>
                 </li>
             </ul>
-            <form id="foc" class="my-2 my-lg-0">
-                <input onclick="sendReq($('#search-input-field').val())" onkeyup="sendReq($('#search-input-field').val())"
-                       class="form-control form-control-lg align-search-box" id="search-input-field"
-                       type="search" placeholder="Search" aria-label="Search">
-            </form>
+            <div>
+                <form id="foc" class="my-2 my-lg-0">
+                    <input autocomplete="off" onclick="sendReq($('#search-input-field').val()); searchAlign()" onkeyup="sendReq($('#search-input-field').val())"
+                           class="form-control form-control-lg align-search-box" id="search-input-field"
+                           type="search" placeholder="Search" aria-label="Search">
+                </form>
+                <div id="search-windowId" class="color-search-window content-search-window scroll">
+
+                </div>
+
+            </div>
+
             <a class="nav-link pointer_cursor" id="switch-mode">
                 <img class="moonSize" src="../../images/night-mode_icon.svg" alt="change mode">
             </a>
@@ -75,7 +121,6 @@
         </div>
 
     </nav>
-
 
 
 
@@ -208,7 +253,7 @@
             document.getElementById("signUp-button").remove();
         }
     }
-    ifAuthenticated(<%=navbarJSPFiller.isAuthenticated()%>)
+    ifAuthenticated(<%=JSPFiller.isAuthenticated()%>)
 </script>
 
 <script>
@@ -226,55 +271,38 @@
     .focusout(function () {
         document.getElementById("search-windowId").style.maxHeight = 0 + 'px';
     });
+
+    $(window).resize(function() {
+        searchAlign();
+    });
+
+    function searchAlign() {
+        let winWidth = window.innerWidth;
+        if (winWidth < 992) {
+            document.getElementById("search-windowId").classList.remove("align-search-content");
+            console.log("<");
+        } else {
+            document.getElementById("search-windowId").classList.add("align-search-content");
+            console.log(">");
+        }
+    }
+
+
+
+
+
+
 </script>
 
+
 <script>
-    <%
-        boolean night;
-        Boolean mode = (Boolean) request.getSession().getAttribute("night-mode");
-        if( mode == null)  {
-            System.out.println("there");
-            night = false;
-        } else {
-            System.out.println("th");
-            night = mode;
-        }
-    %>
-    let night = <%=night%>;
-    console.log(night);
-
-    function toggleMode() {
-        let body = document.getElementsByTagName("body").item(0);
-        if (night) body.classList.add('dark-mode');
-        else body.classList.remove('dark-mode');
-    }
-
-    toggleMode();
-
     $('#switch-mode')
-    .click(function () {
-        document.getElementsByTagName("body").item(0).classList.toggle('dark-mode');
-        night = !night;
-        changeMode();
-    })
+        .click(function () {
+            document.getElementsByTagName("body").item(0).classList.toggle('dark-mode');
+            night = !night;
+            changeMode();
+        })
 
-    function changeMode() {
-
-        let data = {
-        "night" : night
-        }
-        $.ajax({
-            type: "POST",
-            url: "/mode",
-            data: JSON.stringify(data),
-            success: function (response) {
-                night = !response;
-            },
-            dataType: "json",
-            contentType: "application/json"
-        });
-
-    }
 </script>
 
 
