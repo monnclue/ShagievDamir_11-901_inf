@@ -2,7 +2,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="ru.itis.models.ProductForCart" %>
 <%@ page import="ru.itis.jspFillers.JSPFiller" %>
-<%@ page import="ru.itis.jspFillers.JSPFiller" %><%--
+<%@ page import="ru.itis.jspFillers.JSPFiller" %>
+<%@ page import="ru.itis.models.Address" %><%--
   Created by IntelliJ IDEA.
   User: kellyss
   Date: 02/11/2020
@@ -139,7 +140,7 @@
 <div id="right-block" class="address-block center">
     <div id="addresses-box" class="align-input_cart">
         <h3 class="text-10left"><b>Адрес</b></h3>
-        <div class="form-group">
+        <div class="form-group" onfocusout="hideAddresses()" >
             <label id="addresses-label" onmouseover="showAddresses()" class="text-10left" for="addresses">Сохраненные адреса</label>
             <div id="select-box">
 
@@ -147,7 +148,7 @@
 
         </div>
 
-        <form action="/promo" class="form-promo" method="post">
+        <form action="/cart?action=address" class="form-promo" method="post">
             <div class="form-group">
                 <label class="red text-10left" for="nameInput">Имя</label>
                 <input class="form-control select-size" id="nameInput" placeholder=" ">
@@ -163,14 +164,15 @@
                 <input class="form-control select-size" id="postCodeInput" placeholder=" ">
                 <label class="red text-10left" for="phoneNumInput">Номер телефона</label>
                 <input class="form-control select-size" id="phoneNumInput" placeholder=" ">
-                <button type="submit" class="btn btn-outline-dark button-address">Подтвердить</button>
             </div>
         </form>
 
-        <form action="/address?action=save" class="align-button-addAddress" method="post">
-            <button type="submit" class="btn btn-outline-dark button-address">Добавить в сохраненные</button>
-        </form>
 
+
+        <div onclick="saveAddress()" class="align-button-addAddress pointer_cursor" >
+            <button class="btn btn-outline-dark button-address">Добавить в сохраненные</button>
+        </div>
+        <br>
 
 
     </div>
@@ -184,7 +186,7 @@
                 <option value="pochta">Почта России – 300р.</option>
             </select>
         </div>
-        <div class="text-10left">
+        <div class="text-10left" id="priceField">
             <h3> <b> К оплате: <%=price%> р.</b></h3>
         </div>
         <form action="/promo" class="form-promo" method="post">
@@ -199,6 +201,7 @@
         </form>
     </div>
 </div>
+
 
 
 
@@ -228,7 +231,6 @@
                 let divClose = '</div>';
 
                 for (let i = 0; i < products.length; i++) {
-                    console.log(products[i]['name'])
                     searchWindow.insertAdjacentHTML('afterbegin',divClose);
                     searchWindow.insertAdjacentHTML('afterbegin',br);
                     searchWindow.insertAdjacentText('afterbegin',products[i]['description']);
@@ -264,7 +266,8 @@
     <script>
         let price = 0;
         function getPrice() {
-            document.getElementById("priceField").innerText = price + <%=price%>;
+            let totalPrice = (price + <%=price%>);
+            document.getElementById("priceField").innerHTML = '<h3> <b> К оплате: ' + totalPrice + ' р. </h3> </b>';
         }
 
 
@@ -293,17 +296,53 @@
 
         }
 
-        function setAddress(value) {
-            console.log(value);
-        }
     </script>
 
     <script>
-        function showAddresses() {
-            console.log("show")
-            document.getElementById('select-box').innerHTML = '<select size="2" onchange="setAddress(this.value)" onfocusout="hideAddresses()" multiple class="form-control select-size" id="addresses">\n' +
-                '                <option>Нет сохраненных адресов</option>\n' +
 
+
+    </script>
+
+    <script>
+
+        <%
+            List<Address> addresses = (List<Address>) request.getAttribute("addresses");
+System.out.println(addresses.size());
+        %>
+        let addressesSave = [];
+
+        <%
+        for (int i = 0; i < addresses.size(); i++) {
+        %>
+        let addr = {
+            "id": <%=addresses.get(i).getId()%>,
+            "firstName": '<%=addresses.get(i).getFirstName()%>',
+            "lastName": '<%=addresses.get(i).getLastName()%>',
+            "country": '<%=addresses.get(i).getCountry()%>',
+            "city": '<%=addresses.get(i).getCity()%>',
+            "street": '<%=addresses.get(i).getStreet()%>',
+            "postcode": '<%=addresses.get(i).getPostcode()%>',
+            "phone": '<%=addresses.get(i).getPhone()%>'
+        }
+        addressesSave[<%=i%>] = addr;
+        <%
+        }
+        %>
+        function showAddresses() {
+            document.getElementById('select-box').innerHTML = '<select size="2" onchange="setAddress()" multiple class="form-control select-size" id="addresses">\n' +
+                <%
+                if (addresses.size() == 0) {
+                %>
+                '  <option value="none">Нет сохраненных адресов</option>\n' +
+                <%
+                } else {
+                    for (Address address: addresses) {
+                        %>
+                '  <option value="<%=address.getId()%>"><%=address.getCountry()%> <%=address.getCity()%> <%=address.getStreet()%> <%=address.getPostcode()%></option>\n' +
+                <%
+            }
+        }
+        %>
                 '            </select>'
             document.getElementById('addresses').focus();
         }
@@ -312,7 +351,67 @@
             document.getElementById('addresses').remove();
         }
 
+
+        function renderAddressesWindow(addresses) {
+            addressesSave = addresses;
+            let innerHtml = '';
+            for (let i = 0; i < addresses.length; i++) {
+                innerHtml +=
+                    '<option value="'+ addresses[i]['id']  + '">' +
+                    addresses[i]['country'] + ' ' +
+                    addresses[i]['city'] + ' ' +
+                    addresses[i]['street'] + ' ' +
+                    addresses[i]['postcode'] + ' ' +
+
+
+                    '</option>';
+            }
+            $('#addresses').html(innerHtml);
+        }
+
+
+        function saveAddress() {
+            let data = {
+                "firstName": $('#nameInput').val(),
+                "lastName": $('#surnameInput').val(),
+                "country": $('#countryInput').val(),
+                "city": $('#cityInput').val(),
+                "street": $('#addressInput').val(),
+                "postcode": $('#postCodeInput').val(),
+                "phone": $('#phoneNumInput').val()
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/cart?action=address",
+                data: JSON.stringify(data),
+                success: function (response) {
+                    renderAddressesWindow(response);
+                },
+                dataType: "json",
+                contentType: "application/json"
+            })
+
+        }
+
+        function setAddress() {
+            for (let i = 0; i < addressesSave.length; i++) {
+                if (addressesSave[i]['id'] == $('#addresses').val()) {
+                    $('#nameInput').val(addressesSave[i]['firstName']);
+                    $('#surnameInput').val(addressesSave[i]['lastName']);
+                    $('#countryInput').val(addressesSave[i]['country']);
+                    $('#cityInput').val(addressesSave[i]['city']);
+                    $('#addressInput').val(addressesSave[i]['street']);
+                    $('#postCodeInput').val(addressesSave[i]['postcode']);
+                    $('#phoneNumInput').val(addressesSave[i]['phone']);
+                }
+            }
+        }
+
     </script>
+
+
+
 
     <script>
     $('#switch-mode')

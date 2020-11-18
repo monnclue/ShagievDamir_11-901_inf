@@ -33,12 +33,14 @@ public class SkeletonListener implements ServletContextListener {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         UsersRepository usersRepository = new UsersRepositoryJdbcTemplateImpl(dataSource);
         SizeRepository sizeRepository = new SizeRepositoryJdbcTemplateImpl(dataSource);
+        AddressRepository addressRepository = new AddressRepositoryJdbcImpl(dataSource);
         ProductsRepository productsRepository = new ProductsRepositoryJdbcTemplateImpl(dataSource);
         SignUpService signUpService = new SignUpServiceImpl(usersRepository, passwordEncoder);
         SignInService signInService = new SignInServiceImpl(usersRepository, passwordEncoder);
         CheckingService checkingService = new CheckingServiceImpl(usersRepository);
         ProductService productService = new ProductServiceImpl(productsRepository);
         AdminService adminService = new AdminServiceImpl(sizeRepository);
+        AddressService addressService = new AddressServiceImpl(addressRepository);
         CartService cartService = new CartServiceImpl(sizeRepository, usersRepository);
         servletContext.setAttribute("signUpService", signUpService);
         servletContext.setAttribute("signInService", signInService);
@@ -46,6 +48,7 @@ public class SkeletonListener implements ServletContextListener {
         servletContext.setAttribute("checkingService",checkingService);
         servletContext.setAttribute("cartService", cartService);
         servletContext.setAttribute("adminService", adminService);
+        servletContext.setAttribute("addressService", addressService);
     }
 
     @Override

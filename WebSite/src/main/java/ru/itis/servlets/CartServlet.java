@@ -1,7 +1,10 @@
 package ru.itis.servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ru.itis.dto.AddressForm;
+import ru.itis.models.Address;
 import ru.itis.models.ProductForCart;
+import ru.itis.services.AddressService;
 import ru.itis.services.CartService;
 import ru.itis.services.ProductService;
 
@@ -20,6 +23,7 @@ public class CartServlet extends HttpServlet {
 
     private ProductService productService;
     private CartService cartService;
+    private AddressService addressService;
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
@@ -27,19 +31,32 @@ public class CartServlet extends HttpServlet {
         ServletContext context = config.getServletContext();
         this.productService = (ProductService) context.getAttribute("productService");
         this.cartService = (CartService) context.getAttribute("cartService");
+        this.addressService = (AddressService) context.getAttribute("addressService");
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<ProductForCart> products = cartService.getChosen(req.getSession());
-//        req.setCharacterEncoding("UTF-8");
-  //      resp.setCharacterEncoding("UTF-8");
+        List<Address> addresses = addressService.getAddresses(req.getSession());
         req.setAttribute("products", products);
+        req.setAttribute("addresses", addresses);
         req.getRequestDispatcher("/WEB-INF/jsp/cart.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+        req.setCharacterEncoding("UTF-8");
+        resp.setCharacterEncoding("UTF-8");
+        String reqParam = req.getParameter("action");
+        String addressAsJSON = null;
+        if (reqParam.startsWith("address")) {
+            System.out.println(req.getParameterMap().keySet());
+            AddressForm addressForm = objectMapper.readValue(req.getReader(), AddressForm.class);
+            addressService.addAddress(req.getSession(), addressForm);
+            addressAsJSON = objectMapper
+                    .writeValueAsString(addressService.getAddresses(req.getSession()));
+        }
+        resp.setContentType("application/json");
+        resp.getWriter().println(addressAsJSON);
     }
 }
