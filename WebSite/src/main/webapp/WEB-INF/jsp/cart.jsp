@@ -3,7 +3,8 @@
 <%@ page import="ru.itis.models.ProductForCart" %>
 <%@ page import="ru.itis.jspFillers.JSPFiller" %>
 <%@ page import="ru.itis.jspFillers.JSPFiller" %>
-<%@ page import="ru.itis.models.Address" %><%--
+<%@ page import="ru.itis.models.Address" %>
+<%@ page import="java.util.Arrays" %><%--
   Created by IntelliJ IDEA.
   User: kellyss
   Date: 02/11/2020
@@ -15,6 +16,9 @@
 <head>
 
     <title>Корзина</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
+    </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="../../css/sty.css"/>
     <link rel="stylesheet" type="text/css" href="../../css/night.css"/>
@@ -28,44 +32,25 @@
 <body class="body-filter">
 <script>
     <%
-        boolean night;
-        Boolean mode = (Boolean) request.getSession().getAttribute("night-mode");
-        if( mode == null)  {
-            night = false;
-        } else {
-            night = mode;
-        }
+    String mode;
+    if(Arrays.stream(request.getCookies())
+    .noneMatch(cookie -> cookie.getName().equals("mode"))) {
+        mode = "day";
+    } else {
+        mode = Arrays.stream(request.getCookies())
+        .filter(cookie -> cookie.getName().equals("mode")).findFirst().get().getValue();
+    }
     %>
-    let night = <%=night%>;
-    console.log(night);
+    let mode = '<%=mode%>';
 
     function toggleMode() {
         let body = document.getElementsByTagName("body").item(0);
-        if (night) body.classList.add('dark-mode');
+        if (mode === 'night') body.classList.add('dark-mode');
         else body.classList.remove('dark-mode');
-
     }
 
     toggleMode();
 
-
-    function changeMode() {
-
-        let data = {
-            "night" : night
-        }
-        $.ajax({
-            type: "POST",
-            url: "/mode",
-            data: JSON.stringify(data),
-            success: function (response) {
-                night = !response;
-            },
-            dataType: "json",
-            contentType: "application/json"
-        });
-
-    }
 </script>
 
 
@@ -89,14 +74,7 @@
                     <a class="nav-link" id="profile-button" href="/profile">Мой профиль<span class="sr-only">(current)</span></a>
                 </li>
             </ul>
-            <form id="foc" class="my-2 my-lg-0">
-                <input onclick="sendReq($('#search-input-field').val())" onkeyup="sendReq($('#search-input-field').val())"
-                       class="form-control form-control-lg align-search-box" id="search-input-field"
-                       type="search" placeholder="Search" aria-label="Search">
-            </form>
-            <a class="nav-link pointer_cursor" id="switch-mode">
-                <img class="moonSize" src="../../images/night-mode_icon.svg" alt="change mode">
-            </a>
+
 
 
         </div>
@@ -217,51 +195,6 @@
     </script>
 
 
-    <script>
-        function clearSearchWindow() {
-            document.getElementById("search-windowId").innerHTML = '';
-        }
-
-        function renderSearchWindow(products) {
-            clearSearchWindow(products);
-            if (products != null) {
-                let searchWindow = document.getElementById("search-windowId");
-                let br = '<br>';
-                let div = '<div class="art-products-box">';
-                let divClose = '</div>';
-
-                for (let i = 0; i < products.length; i++) {
-                    searchWindow.insertAdjacentHTML('afterbegin',divClose);
-                    searchWindow.insertAdjacentHTML('afterbegin',br);
-                    searchWindow.insertAdjacentText('afterbegin',products[i]['description']);
-                    searchWindow.insertAdjacentText('afterbegin','. ');
-                    searchWindow.insertAdjacentText('afterbegin',products[i]['name']);
-                    searchWindow.insertAdjacentHTML('afterbegin',div)
-                }
-            }
-
-
-
-        }
-
-        function sendReq(name) {
-
-            let data = {
-                "name": name
-            };
-
-            $.ajax({
-                type: "POST",
-                url: "/shop?action=name",
-                data: JSON.stringify(data),
-                success: function (response) {
-                    renderSearchWindow(response);
-                },
-                dataType: "json",
-                contentType: "application/json"
-            });
-        }
-    </script>
 
     <script>
         let price = 0;
@@ -278,9 +211,13 @@
     <script>
         let shippingMethod;
 
-        function setShip(value) {
-            shippingMethod = value;
+        function setShip(shippingMethod) {
             ship_price = 0;
+            $.ajax({
+                type: "POST",
+                url: "/shop?action=ship",
+                data: JSON.stringify({"shippingMethod": shippingMethod}),
+            })
             if (shippingMethod === 'pochta') {
                 ship_price = 300;
                 editPrice(ship_price);
@@ -298,10 +235,6 @@
 
     </script>
 
-    <script>
-
-
-    </script>
 
     <script>
 

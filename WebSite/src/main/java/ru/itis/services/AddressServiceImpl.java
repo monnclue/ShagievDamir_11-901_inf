@@ -24,7 +24,6 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public void addAddress(HttpSession session, AddressForm addressForm) {
         UserDto userDto = (UserDto) session.getAttribute("user");
-        System.out.println("wotofak");
         Address address = Address.builder()
                 .accountId(userDto.getId())
                 .city(addressForm.getCity())

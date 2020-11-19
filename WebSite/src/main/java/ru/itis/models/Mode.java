@@ -9,5 +9,5 @@ import lombok.*;
 @EqualsAndHashCode
 @Builder
 public class Mode {
-    private Boolean night;
+    private String mode;
 }

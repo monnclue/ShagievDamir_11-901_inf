@@ -1,4 +1,4 @@
-<%--
+<%@ page import="java.util.Arrays" %><%--
   Created by IntelliJ IDEA.
   User: Marsel
   Date: 28.10.2020
@@ -9,6 +9,9 @@
 <html>
 <head>
     <title>Мой профиль</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
+    </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="../../css/sty.css"/>
     <link rel="stylesheet" type="text/css" href="../../css/night.css">
@@ -23,50 +26,25 @@
 <body>
 <script>
     <%
-        boolean night;
-        Boolean mode = (Boolean) request.getSession().getAttribute("night-mode");
-        if( mode == null)  {
-            night = false;
-        } else {
-            night = mode;
-        }
+    String mode;
+    if(Arrays.stream(request.getCookies())
+    .noneMatch(cookie -> cookie.getName().equals("mode"))) {
+        mode = "day";
+    } else {
+        mode = Arrays.stream(request.getCookies())
+        .filter(cookie -> cookie.getName().equals("mode")).findFirst().get().getValue();
+    }
     %>
-    let night = <%=night%>;
-    console.log(night);
+    let mode = '<%=mode%>';
 
     function toggleMode() {
         let body = document.getElementsByTagName("body").item(0);
-        if (night) body.classList.add('dark-mode');
+        if (mode === 'night') body.classList.add('dark-mode');
         else body.classList.remove('dark-mode');
-
     }
 
     toggleMode();
 
-    $('#switch-mode')
-        .click(function () {
-            document.getElementsByTagName("body").item(0).classList.toggle('dark-mode');
-            night = !night;
-            changeMode();
-        })
-
-    function changeMode() {
-
-        let data = {
-            "night" : night
-        }
-        $.ajax({
-            type: "POST",
-            url: "/mode",
-            data: JSON.stringify(data),
-            success: function (response) {
-                night = !response;
-            },
-            dataType: "json",
-            contentType: "application/json"
-        });
-
-    }
 </script>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -83,9 +61,6 @@
 
         </ul>
 
-        <a class="nav-link pointer_cursor" id="switch-mode">
-            <img class="moonSize" src="../../images/night-mode_icon.svg" alt="change mode">
-        </a>
 
     </div>
 
@@ -101,6 +76,7 @@
 
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous">
+
 </script>
 
 

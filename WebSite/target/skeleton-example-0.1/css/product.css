@@ -1,9 +1,15 @@
 .align-text-product {
     position: absolute;
-    top: 72px;
-    left: 350px;
+    top: 150px;
+    left: 600px;
 }
 
 .select-size-product {
     width: 200px;
+}
+
+.align-img-product {
+    position: absolute;
+    left: 20px;
+    top: 100px;
 }

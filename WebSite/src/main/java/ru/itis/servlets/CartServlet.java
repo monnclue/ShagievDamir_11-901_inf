@@ -3,6 +3,7 @@ package ru.itis.servlets;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.itis.dto.AddressForm;
 import ru.itis.models.Address;
+import ru.itis.models.Order;
 import ru.itis.models.ProductForCart;
 import ru.itis.services.AddressService;
 import ru.itis.services.CartService;
@@ -24,6 +25,7 @@ public class CartServlet extends HttpServlet {
     private ProductService productService;
     private CartService cartService;
     private AddressService addressService;
+    private Order order;
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
@@ -39,6 +41,7 @@ public class CartServlet extends HttpServlet {
         List<ProductForCart> products = cartService.getChosen(req.getSession());
         List<Address> addresses = addressService.getAddresses(req.getSession());
         req.setAttribute("products", products);
+        this.order = cartService.generateOrder(products);
         req.setAttribute("addresses", addresses);
         req.getRequestDispatcher("/WEB-INF/jsp/cart.jsp").forward(req, resp);
     }
@@ -49,12 +52,18 @@ public class CartServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
         String reqParam = req.getParameter("action");
         String addressAsJSON = null;
+
         if (reqParam.startsWith("address")) {
             System.out.println(req.getParameterMap().keySet());
             AddressForm addressForm = objectMapper.readValue(req.getReader(), AddressForm.class);
             addressService.addAddress(req.getSession(), addressForm);
             addressAsJSON = objectMapper
                     .writeValueAsString(addressService.getAddresses(req.getSession()));
+        }
+        if (reqParam.startsWith("ship")) {
+            Order orderFromAjax = objectMapper.readValue(req.getReader(), Order.class);
+            cartService.editPriceShipMethod(this.order, orderFromAjax.getShippingNethod());
+
         }
         resp.setContentType("application/json");
         resp.getWriter().println(addressAsJSON);

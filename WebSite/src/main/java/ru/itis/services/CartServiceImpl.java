@@ -2,6 +2,7 @@ package ru.itis.services;
 
 import ru.itis.dto.ProductForCartForm;
 import ru.itis.dto.UserDto;
+import ru.itis.models.Order;
 import ru.itis.models.Product;
 import ru.itis.models.ProductForCart;
 import ru.itis.models.ProductSize;
@@ -53,4 +54,22 @@ public class CartServiceImpl implements CartService {
         }
         return sizes;
     }
+
+    @Override
+    public Order generateOrder(List<ProductForCart> products) {
+        int totalPrice = 0;
+        for (ProductForCart product:products) {
+            totalPrice += product.getPrice();
+        }
+        return Order.builder().totalPrice(totalPrice).build();
+    }
+
+    @Override
+    public void editPriceShipMethod(Order order, String ship) {
+        if (ship.equals("pochta")) {
+            order.increasePrice(300);
+        }
+    }
+
+
 }
