@@ -141,7 +141,7 @@
 </script>
 
 <script>
-    function clearSearchWindow(products) {
+    function clearSearchWindow() {
         document.getElementById("search-windowId").innerHTML = '';
     }
     function renderCat(products, table) {
@@ -181,17 +181,19 @@
     }
 
     function renderSearchWindow(products) {
-        clearSearchWindow(products);
+        clearSearchWindow();
         if (products != null) {
             let searchWindow = document.getElementById("search-windowId");
-            let br = '<br>';
 
             for (let i = 0; i < products.length; i++) {
-                console.log(products[i]['name'])
-                searchWindow.insertAdjacentHTML('afterbegin',br);
-                searchWindow.insertAdjacentText('afterbegin',products[i]['description']);
-                searchWindow.insertAdjacentText('afterbegin','. ');
-                searchWindow.insertAdjacentText('afterbegin',products[i]['name']);
+                searchWindow.insertAdjacentHTML('beforeend',
+                    '<a class="link-sepia" href="/product?id=' + products[i]['id'] +'">' +
+                    '<div>'
+                        + products[i]['name'] + '. '
+                        + products[i]['description'] +
+                    '</div>' +
+                    '</a>' +
+                    '<br>');
             }
         }
 
@@ -305,10 +307,6 @@
 </script>
 
 
-
-<!-- вдруг понадобится -->
-<%  //String[] events = new String[] {"keyup","focusin", "focusout"};
-    //for (int i = 0; i < 2; i++) {%>
 
 
 </body>

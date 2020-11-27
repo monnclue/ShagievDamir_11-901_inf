@@ -12,6 +12,5 @@ public interface ProductService {
     List<Product> getAllProducts();
     List<Product> getAllByName(String name);
     List<Product> getAllByType(String type);
-    List<Product> getMostOrdered();
 }
 

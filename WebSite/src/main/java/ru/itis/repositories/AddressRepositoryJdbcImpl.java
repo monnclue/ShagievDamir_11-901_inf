@@ -1,7 +1,9 @@
 package ru.itis.repositories;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import ru.itis.dto.AddressForm;
 import ru.itis.models.Address;
 import ru.itis.models.Product;
 
@@ -14,6 +16,12 @@ public class AddressRepositoryJdbcImpl implements AddressRepository{
 
     private JdbcTemplate jdbcTemplate;
 
+    //language=SQL
+    private static final String SQL_SELECT_BY_DATA =
+            "select * from addresses where first_name = ? " +
+                    "and last_name = ? and country = ?" +
+                    "and city = ? and street_with_house_with_room = ?" +
+                    "and postal_code = ? and phone_number = ?";
     //language=SQL
     private static final String SQL_SELECT_BY_ACCOUNT_ID
             = "select * from addresses where account_id = ?";
@@ -45,6 +53,20 @@ public class AddressRepositoryJdbcImpl implements AddressRepository{
     @Override
     public List<Address> getAddressByAccountId(Long id) {
         return jdbcTemplate.query(SQL_SELECT_BY_ACCOUNT_ID, addressRowMapper, id);
+    }
+
+    @Override
+    public Optional<Address> getAddressByData(AddressForm addressForm) {
+        try {
+            return Optional.of(jdbcTemplate.queryForObject(
+                    SQL_SELECT_BY_DATA, addressRowMapper,
+                    addressForm.getFirstName(), addressForm.getLastName(),
+                    addressForm.getCountry(), addressForm.getCity(),
+                    addressForm.getStreet(), addressForm.getPostcode(),
+                    addressForm.getPhone()));
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     @Override

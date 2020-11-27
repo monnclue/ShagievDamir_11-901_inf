@@ -36,5 +36,13 @@ public class AddressServiceImpl implements AddressService {
         addressRepository.save(address);
     }
 
+    @Override
+    public Address getAddressOrSaveIfDoesntExist(HttpSession session, AddressForm addressForm) {
+        if (!addressRepository.getAddressByData(addressForm).isPresent()) {
+            addAddress(session, addressForm);
+        }
+        return addressRepository.getAddressByData(addressForm).get();
+    }
+
 
 }

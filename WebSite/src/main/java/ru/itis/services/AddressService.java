@@ -9,4 +9,5 @@ import java.util.List;
 public interface AddressService {
     List<Address> getAddresses(HttpSession session);
     void addAddress(HttpSession session, AddressForm addressForm);
+    Address getAddressOrSaveIfDoesntExist(HttpSession session, AddressForm addressForm);
 }

@@ -3,8 +3,9 @@ package ru.itis.servlets;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.itis.dto.AddressForm;
 import ru.itis.models.Address;
-import ru.itis.models.Order;
+import ru.itis.models.OrderForCart;
 import ru.itis.models.ProductForCart;
+import ru.itis.models.Promo;
 import ru.itis.services.AddressService;
 import ru.itis.services.CartService;
 import ru.itis.services.ProductService;
@@ -25,7 +26,7 @@ public class CartServlet extends HttpServlet {
     private ProductService productService;
     private CartService cartService;
     private AddressService addressService;
-    private Order order;
+    private OrderForCart orderForCart;
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
@@ -41,7 +42,7 @@ public class CartServlet extends HttpServlet {
         List<ProductForCart> products = cartService.getChosen(req.getSession());
         List<Address> addresses = addressService.getAddresses(req.getSession());
         req.setAttribute("products", products);
-        this.order = cartService.generateOrder(products);
+        this.orderForCart = cartService.generateOrderForCart(products);
         req.setAttribute("addresses", addresses);
         req.getRequestDispatcher("/WEB-INF/jsp/cart.jsp").forward(req, resp);
     }
@@ -51,21 +52,49 @@ public class CartServlet extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
         String reqParam = req.getParameter("action");
-        String addressAsJSON = null;
+        String addressAsJSON;
 
         if (reqParam.startsWith("address")) {
-            System.out.println(req.getParameterMap().keySet());
             AddressForm addressForm = objectMapper.readValue(req.getReader(), AddressForm.class);
             addressService.addAddress(req.getSession(), addressForm);
             addressAsJSON = objectMapper
                     .writeValueAsString(addressService.getAddresses(req.getSession()));
+            resp.setContentType("application/json");
+            resp.getWriter().println(addressAsJSON);
         }
         if (reqParam.startsWith("ship")) {
-            Order orderFromAjax = objectMapper.readValue(req.getReader(), Order.class);
-            cartService.editPriceShipMethod(this.order, orderFromAjax.getShippingNethod());
+            OrderForCart orderForCartFromAjax = objectMapper.readValue(req.getReader(), OrderForCart.class);
+            cartService.editPriceShipMethod(this.orderForCart, orderForCartFromAjax.getShippingMethod());
+        }
+        if (reqParam.startsWith("order")) {
+            AddressForm addressForm = objectMapper.readValue(req.getReader(), AddressForm.class);
+            if (addressForm.getCity().length() == 0 || addressForm.getCountry().length() == 0 ||
+            addressForm.getFirstName().length() == 0 || addressForm.getLastName().length() == 0 ||
+            addressForm.getPostcode().length() == 0 || addressForm.getPhone().length() == 0) {
+                resp.getWriter().print("emptyField");
+            } else {
+                Address address = addressService.getAddressOrSaveIfDoesntExist(req.getSession(), addressForm);
+                cartService.generateOrder(req.getSession(), address, this.orderForCart);
+                resp.sendRedirect("/order");
+            }
+        }
+        if (reqParam.startsWith("promo")) {
+            Promo promo = objectMapper.readValue(req.getReader(), Promo.class);
+            boolean exist = cartService.getPromoPrice(promo.getCode()) != -1;
+            if (exist) {
+                resp.getWriter().print("exist " +
+                        cartService.getPromoPrice(promo.getCode()));
+                this.orderForCart.setPromoPrice(cartService.getPromoPrice(promo.getCode()));
+            }
+            else resp.getWriter().print("notfound");
+
 
         }
-        resp.setContentType("application/json");
-        resp.getWriter().println(addressAsJSON);
+        if (reqParam.startsWith("delete")) {
+            String id = req.getParameter("prod");
+
+            resp.sendRedirect("/cart");
+        }
+
     }
 }

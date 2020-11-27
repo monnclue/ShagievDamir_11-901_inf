@@ -34,14 +34,18 @@ public class SkeletonListener implements ServletContextListener {
         UsersRepository usersRepository = new UsersRepositoryJdbcTemplateImpl(dataSource);
         SizeRepository sizeRepository = new SizeRepositoryJdbcTemplateImpl(dataSource);
         AddressRepository addressRepository = new AddressRepositoryJdbcImpl(dataSource);
+        PromocodeRepository promocodeRepository = new PromocodeRepositoryJdbcImpl(dataSource);
         ProductsRepository productsRepository = new ProductsRepositoryJdbcTemplateImpl(dataSource);
+        OrderRepository orderRepository = new OrderRepositoryJdbcImpl(dataSource);
         SignUpService signUpService = new SignUpServiceImpl(usersRepository, passwordEncoder);
         SignInService signInService = new SignInServiceImpl(usersRepository, passwordEncoder);
         CheckingService checkingService = new CheckingServiceImpl(usersRepository);
+        OrderService orderService = new OrderServiceImpl(orderRepository);
         ProductService productService = new ProductServiceImpl(productsRepository);
         AdminService adminService = new AdminServiceImpl(sizeRepository);
         AddressService addressService = new AddressServiceImpl(addressRepository);
-        CartService cartService = new CartServiceImpl(sizeRepository, usersRepository);
+        CartService cartService = new CartServiceImpl(sizeRepository, usersRepository,
+                promocodeRepository, orderRepository);
         servletContext.setAttribute("signUpService", signUpService);
         servletContext.setAttribute("signInService", signInService);
         servletContext.setAttribute("productService", productService);
@@ -49,6 +53,7 @@ public class SkeletonListener implements ServletContextListener {
         servletContext.setAttribute("cartService", cartService);
         servletContext.setAttribute("adminService", adminService);
         servletContext.setAttribute("addressService", addressService);
+        servletContext.setAttribute("orderService", orderService);
     }
 
     @Override

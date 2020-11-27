@@ -24,16 +24,7 @@ public class ProductsRepositoryJdbcTemplateImpl implements ProductsRepository{
     private static final String SQL_SELECT_ALL = "select * from products";
     //language=SQL
     private static final String SQL_SELECT_BY_ID = "select * from products where id = ?";
-    //language=SQL
-    private static final String SQL_SELECT_BY_ORDERS =
-            "with w2_cte(product_id) as " +
-                    "(with w_cte (product_id, count) as " +
-                        "(select product_id, count(*) " +
-                        "from orders group by product_id) " +
-                    "select product_id " +
-                    "from w_cte order by count desc limit ?) " +
-            "select id, name, type, imageURL, description, price " +
-            "from w2_cte join products on w2_cte.product_id = products.id";
+
 
     private JdbcTemplate jdbcTemplate;
 
@@ -62,10 +53,6 @@ public class ProductsRepositoryJdbcTemplateImpl implements ProductsRepository{
                     SQL_SELECT_ALL_PRODUCTS_BY_NAME, productRowMapper,  name );
     }
 
-    @Override
-    public List<Product> selectByTopOrders(int topCount) {
-        return jdbcTemplate.query(SQL_SELECT_BY_ORDERS, productRowMapper, topCount);
-    }
 
 
     @Override

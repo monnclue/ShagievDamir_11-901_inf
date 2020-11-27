@@ -103,7 +103,7 @@
                     </div>
                 </td>
                 <td>
-                    <form id="deleteFromCartID" class="form-inline my-2 my-lg-0 button__delete" >
+                    <form id="deleteFromCartID<%=product.getProductSize_id()%>" class="form-inline my-2 my-lg-0 button__delete" action="/cart?action=delete&prod=<%=product.getProductSize_id()%>" method="post">
                         <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Удалить из корзины</button>
                     </form>
                 </td>
@@ -119,7 +119,7 @@
     <div id="addresses-box" class="align-input_cart">
         <h3 class="text-10left"><b>Адрес</b></h3>
         <div class="form-group" onfocusout="hideAddresses()" >
-            <label id="addresses-label" onmouseover="showAddresses()" class="text-10left" for="addresses">Сохраненные адреса</label>
+            <label id="addresses-label" onmouseover="showAddresses()" class="text-10left" for="addresses">Показать сохраненные адреса</label>
             <div id="select-box">
 
             </div>
@@ -159,24 +159,26 @@
     <div class="align-order-box">
         <div class="form-group">
             <label class="text-10left" for="shipping"><h3><b>Вариант доставки</b></h3></label>
-            <select size="2" onchange="setShip(this.value)" multiple class="form-control select-size" id="shipping">
-                <option value="kazan">Самовывоз в г.Казань – 0р.</option>
+            <select size="2" onchange="setShip()" class="form-control select-size" id="shipping">
+                <option value="kazan">Доставка по г.Казань – 0р.</option>
                 <option value="pochta">Почта России – 300р.</option>
             </select>
         </div>
         <div class="text-10left" id="priceField">
             <h3> <b> К оплате: <%=price%> р.</b></h3>
         </div>
-        <form action="/promo" class="form-promo" method="post">
+        <div class="form-promo">
             <div class="form-group">
-                <label class="red text-10left" for="exampleFormControlInput1">  Промокод</label>
-                <input class="form-control uppercase input-promo" id="exampleFormControlInput1" placeholder=" ">
-                <button type="submit" class="btn btn-outline-dark button-position">Применить</button>
+                <label class="red text-10left" id="promolabel" for="promo">  Промокод</label>
+                <input class="form-control uppercase input-promo" id="promo" placeholder=" ">
+                <button class="btn btn-outline-dark button-position" id="submitPromo">Применить</button>
             </div>
-        </form>
-        <form action="/order" method="POST">
-            <button class="btn btn-outline-dark  button-position_order">Оформить заказ</button>
-        </form>
+        </div>
+        <div>
+            <button id="orderForCart-button" onclick="postOrder()" class="btn btn-outline-dark  button-position_order">Оформить заказ</button>
+        </div>
+
+
     </div>
 </div>
 
@@ -197,36 +199,45 @@
 
 
     <script>
-        let price = 0;
+        let shipPrice = 0;
+        let promoPrice = 0;
+
         function getPrice() {
-            let totalPrice = (price + <%=price%>);
+            let totalPrice = (shipPrice + <%=price%> - promoPrice);
             document.getElementById("priceField").innerHTML = '<h3> <b> К оплате: ' + totalPrice + ' р. </h3> </b>';
         }
 
 
-        function editPrice(value) {
-            price = value;
+        function editShipPrice(value) {
+            shipPrice = value;
+        }
+
+        function editPromoPrice(value) {
+            promoPrice = value;
         }
     </script>
     <script>
-        let shippingMethod;
 
-        function setShip(shippingMethod) {
-            ship_price = 0;
+        function setShip() {
+            let ship_price = 0;
+            let $shipMethod = $('#shipping').val();
+            let data = {"shippingMethod": $shipMethod};
             $.ajax({
                 type: "POST",
-                url: "/shop?action=ship",
-                data: JSON.stringify({"shippingMethod": shippingMethod}),
+                url: "/cart?action=ship",
+                data: JSON.stringify(data),
+                dataType: "json",
+                contentType: "application/json"
             })
-            if (shippingMethod === 'pochta') {
+            if ($shipMethod === 'pochta') {
                 ship_price = 300;
-                editPrice(ship_price);
+                editShipPrice(ship_price);
             }
-            if (shippingMethod === 'kazan') {
+            if ($shipMethod === 'kazan') {
                 if (ship_price === 300) {
-                    editPrice(-300)
+                    editShipPrice(-300)
                 } else {
-                    editPrice(0)
+                    editShipPrice(0)
                 }
             }
             getPrice();
@@ -240,14 +251,13 @@
 
         <%
             List<Address> addresses = (List<Address>) request.getAttribute("addresses");
-System.out.println(addresses.size());
         %>
         let addressesSave = [];
 
         <%
         for (int i = 0; i < addresses.size(); i++) {
         %>
-        let addr = {
+        let addr<%=i%> = {
             "id": <%=addresses.get(i).getId()%>,
             "firstName": '<%=addresses.get(i).getFirstName()%>',
             "lastName": '<%=addresses.get(i).getLastName()%>',
@@ -257,12 +267,12 @@ System.out.println(addresses.size());
             "postcode": '<%=addresses.get(i).getPostcode()%>',
             "phone": '<%=addresses.get(i).getPhone()%>'
         }
-        addressesSave[<%=i%>] = addr;
+        addressesSave[<%=i%>] = addr<%=i%>;
         <%
         }
         %>
         function showAddresses() {
-            document.getElementById('select-box').innerHTML = '<select size="2" onchange="setAddress()" multiple class="form-control select-size" id="addresses">\n' +
+            document.getElementById('select-box').innerHTML = '<select size="2" onchange="setAddress()" class="form-control select-size" id="addresses">\n' +
                 <%
                 if (addresses.size() == 0) {
                 %>
@@ -277,10 +287,11 @@ System.out.println(addresses.size());
         }
         %>
                 '            </select>'
+            document.getElementById('addresses-label').innerText = '';
             document.getElementById('addresses').focus();
         }
         function hideAddresses() {
-            console.log("hide")
+            document.getElementById('addresses-label').innerText = 'Показать сохраненные адреса';
             document.getElementById('addresses').remove();
         }
 
@@ -344,15 +355,65 @@ System.out.println(addresses.size());
     </script>
 
 
-
+    <script>
+        let $promo = $('#promo');
+        let codeValid;
+        $('#submitPromo').on("click", function () {
+            $.ajax({
+                type: "POST",
+                url: "/cart?action=promo",
+                data: JSON.stringify({"code": $promo.val()}),
+                success: function (response) {
+                    if (response === "notfound") {
+                        $('#not-found-promo').remove();
+                        $('#found-promo').remove();
+                        $('#promolabel')
+                            .after("<div id='not-found-promo' " +
+                                "style='color: red'>Введён несуществующий промокод.<div>")
+                    } else if (response.includes("exist")) {
+                        $('#found-promo').remove();
+                        $('#not-found-promo').remove();
+                        $('#submitPromo').remove();
+                        $('#promo').remove();
+                        $('#promolabel')
+                            .after("<div id='found-promo' " +
+                                "style='color: lawngreen'>Промокод применён.<div>");
+                        editPromoPrice(response.split(' ')[1]);
+                        getPrice();
+                    }
+                },
+                dataType: "text",
+                contentType: "application/json"
+            })
+        })
+    </script>
 
     <script>
-    $('#switch-mode')
-        .click(function () {
-            document.getElementsByTagName("body").item(0).classList.toggle('dark-mode');
-            changeMode();
+
+        function postOrder() {
+        let data = {
+                "firstName": $('#nameInput').val(),
+                "lastName": $('#surnameInput').val(),
+                "country": $('#countryInput').val(),
+                "city": $('#cityInput').val(),
+                "street": $('#addressInput').val(),
+                "postcode": $('#postCodeInput').val(),
+                "phone": $('#phoneNumInput').val()
+        }
+        $.ajax({
+            type: "POST",
+            url: "/cart?action=order",
+            data: JSON.stringify(data),
+            success: function (response) {
+                console.log(response);
+                window.open("/order");
+            },
+            dataType: "text",
+            contentType: "application/json"
         })
+    }
 
 </script>
+
 </body>
 </html>

@@ -16,8 +16,7 @@
     <link rel="stylesheet" type="text/css" href="../../css/sty.css"/>
     <link rel="stylesheet" type="text/css" href="../../css/night.css">
 
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous">
-    </script>
+
     <script
             src="https://code.jquery.com/jquery-3.5.1.js"
             integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
@@ -69,9 +68,12 @@
     <form action="/logout" method="POST">
         <button class="btn btn-secondary"> Выйти </button>
     </form>
-    <form action="/order" method="get">
-        <button class="btn btn-secondary"> Мои заказы </button>
-    </form>
+    <div>
+        <button onclick="getOrders()" class="btn btn-secondary"> Мои заказы </button>
+    </div>
+    <div id="orders-box">
+
+    </div>
 </body>
 
 
@@ -79,7 +81,33 @@
 
 </script>
 
+<script>
+    function renderOrders(orders) {
+        let $ordBox = $('#orders-box');
+        for (let i = 0; i < orders.length(); i++) {
+            $ordBox.prepend(orders[i]['price'] + ' ');
+            $ordBox.prepend(orders[i]['isOrderShipped'] + ' ');
+        }
+    }
+    function renderText() {
+        $('#orders-box').prepend("Заказов нет.")
+    }
+    function getOrders() {
+        $.ajax({
+            type: "post",
+            url: "/profile?action=order",
+            success: function (response) {
+                renderOrders(response)
+            },
+            error: function () {
+                renderText();
+            },
+            dataType: "json"
+        })
+    }
+</script>
 
-
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous">
+</script>
 
 </html>

@@ -27,10 +27,8 @@ public class ShopPageServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Product> products = productService.getMostOrdered();
         req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
-        req.setAttribute("products", products);
 
         req.getRequestDispatcher("/WEB-INF/jsp/shop.jsp").forward(req, resp);
     }

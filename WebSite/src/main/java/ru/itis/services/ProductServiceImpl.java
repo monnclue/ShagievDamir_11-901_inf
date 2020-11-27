@@ -47,10 +47,6 @@ public class ProductServiceImpl implements ProductService{
         return productsRepository.findByType(type);
     }
 
-    @Override
-    public List<Product> getMostOrdered() {
-        return productsRepository.selectByTopOrders(10);
-    }
 
     public void deleteProductByID(Long id) {
         productsRepository.delete(id);

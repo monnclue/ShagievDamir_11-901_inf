@@ -9,15 +9,9 @@ import lombok.*;
 @EqualsAndHashCode
 @Builder
 public class Order {
-    private int totalPrice;
-    private String shippingNethod;
-
-    public void increasePrice(int price) {
-        totalPrice += price;
-    }
-    public void decreasePrice(int price) {
-        totalPrice -= price;
-    }
-
+    private int price;
+    private Long accountId;
+    private Long addressId;
+    private boolean isOrderShipped;
+    private String shipMethod;
 }
-

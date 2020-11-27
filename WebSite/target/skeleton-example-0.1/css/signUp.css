@@ -1,0 +1,25 @@
+#signup-box {
+    top: 15px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+input {
+    position: relative;
+    left: 10%;
+}
+
+#signin-button {
+    position: relative;
+    top: -39px;
+    left: 5px;
+}
+
+#signin-form {
+    display: flex;
+    justify-content: center;
+}
+
+
+

@@ -8,5 +8,4 @@ import java.util.Optional;
 public interface ProductsRepository extends CrudRepository<Product> {
     List<Product> findByType(String type);
     List<Product> findByName(String name);
-    List<Product> selectByTopOrders(int topCount);
 }
