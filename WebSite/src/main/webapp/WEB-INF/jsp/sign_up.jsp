@@ -44,13 +44,17 @@
 
 </script>
 
-<%
-    if (request.getSession().getAttribute("message") != null) {
-%>
-<%= request.getSession().getAttribute("message")%>
-<%
-}
-%>
+
+<jsp:useBean id="message" scope="request" type="java.lang.String"/>
+<jsp:useBean id="emailError" scope="request" type="java.lang.String"/>
+
+
+<div style="display: flex; justify-content: center">
+    <c:out value="${message}"/>
+    <c:out value="${emailError}"/>
+</div>
+
+
 
 <div id="signup-box">
     <form action="/signUp" method="post">
@@ -63,13 +67,13 @@
         <div class="form-group row">
             <label for="l2"  class="col-sm-2 col-form-label">Имя</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" id="l2" name="firstName" placeholder="Иван">
+                <input type="text" class="form-control" id="l2" name="firstName" placeholder="">
             </div>
         </div>
         <div class="form-group row">
             <label for="l3"  class="col-sm-2 col-form-label">Фамилия</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" id="l3" name="lastName" placeholder="Иванов">
+                <input type="text" class="form-control" id="l3" name="lastName" placeholder="">
             </div>
         </div>
         <div class="form-group row">
@@ -85,7 +89,7 @@
 </div>
 
 <form id="signin-form" action="/signIn" method="get">
-    <button id="signin-button" class="btn btn-dark"> Войти </button>
+    <button id="signin-button" style="" class="btn btn-dark"> Войти </button>
 </form>
 </body>
 </html>

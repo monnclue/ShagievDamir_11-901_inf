@@ -14,7 +14,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import java.io.IOException;
+import java.util.Set;
 
 /**
  * 26.10.2020
@@ -29,7 +32,8 @@ public class SignUpServlet extends HttpServlet {
     private SignUpService signUpService;
     private SignInService signInService;
     private CheckingService checkingService;
-    private HttpSession session;
+    private Validator validator;
+
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -38,10 +42,13 @@ public class SignUpServlet extends HttpServlet {
         this.signInService = (SignInService) context.getAttribute("signInService");
         this.checkingService = (CheckingService) context.getAttribute(
                 "checkingService");
+        this.validator = (Validator) context.getAttribute("validator");
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setAttribute("message", "");
+        req.setAttribute("emailError", "");
         req.getRequestDispatcher("/WEB-INF/jsp/sign_up.jsp").forward(req, resp);
     }
 
@@ -56,12 +63,20 @@ public class SignUpServlet extends HttpServlet {
                 .password(req.getParameter("password"))
                 .build();
 
-        String message = checkingService.incorrectInput(form);
+        Set<ConstraintViolation<UserForm>> constraintViolations =
+                validator.validate(form);
 
-        if (message != null) {
-            HttpSession session = req.getSession();
-            session.setAttribute("message", message);
-            resp.sendRedirect("/signUp");
+        if (!constraintViolations.isEmpty()) {
+            String message = "Проверьте правильность заполненных данных!";
+            req.setAttribute("message", message);
+            //проверка: существует ли аккаунт с таким email?
+            String emailError = checkingService.incorrectInput(form);
+            if (emailError != null) {
+                req.setAttribute("emailError", emailError);
+                req.setAttribute("message", "");
+            }
+            else req.setAttribute("emailError", "");
+            req.getRequestDispatcher("/WEB-INF/jsp/sign_up.jsp").forward(req, resp);
         } else {
             signUpService.signUp(form);
             UserDto userDto = signInService.signIn(form);

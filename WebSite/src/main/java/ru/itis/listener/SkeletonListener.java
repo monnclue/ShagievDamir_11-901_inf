@@ -10,6 +10,9 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 /**
  * 26.10.2020
@@ -40,6 +43,8 @@ public class SkeletonListener implements ServletContextListener {
         SignUpService signUpService = new SignUpServiceImpl(usersRepository, passwordEncoder);
         SignInService signInService = new SignInServiceImpl(usersRepository, passwordEncoder);
         CheckingService checkingService = new CheckingServiceImpl(usersRepository);
+        ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
+        Validator validator = validatorFactory.getValidator();
         OrderService orderService = new OrderServiceImpl(orderRepository);
         ProductService productService = new ProductServiceImpl(productsRepository);
         AdminService adminService = new AdminServiceImpl(sizeRepository);
@@ -54,6 +59,7 @@ public class SkeletonListener implements ServletContextListener {
         servletContext.setAttribute("adminService", adminService);
         servletContext.setAttribute("addressService", addressService);
         servletContext.setAttribute("orderService", orderService);
+        servletContext.setAttribute("validator", validator);
     }
 
     @Override

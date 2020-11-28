@@ -98,7 +98,7 @@
                     <a class="nav-link" href="/cart">Корзина</a>
                 </li>
                 <li class="nav-item" id="signUp-button">
-                    <a class="nav-link" href="/signUp">Войти</a>
+                    <a class="nav-link" href="/signUp">Создать аккаунт</a>
                 </li>
             </ul>
             <div>
