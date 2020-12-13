@@ -90,7 +90,7 @@
         }
     }
     function renderText() {
-        $('#orders-box').prepend("Заказов нет.")
+        $('#orders-box').html("Заказов нет.")
     }
     function getOrders() {
         $.ajax({

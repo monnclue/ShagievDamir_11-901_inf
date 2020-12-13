@@ -177,6 +177,9 @@
         <div>
             <button id="orderForCart-button" onclick="postOrder()" class="btn btn-outline-dark  button-position_order">Оформить заказ</button>
         </div>
+        <div id="empty" style="color: red">
+
+        </div>
 
 
     </div>
@@ -406,7 +409,11 @@
             data: JSON.stringify(data),
             success: function (response) {
                 console.log(response);
-                window.open("/order");
+                if (response === 'emptyField') {
+                    $('#empty').html(response);
+                } else {
+                    window.open("/order");
+                }
             },
             dataType: "text",
             contentType: "application/json"
