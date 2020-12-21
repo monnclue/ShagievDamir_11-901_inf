@@ -1,0 +1,5 @@
+ru/itis/Model/Client$ClientBuilder.class
+ru/itis/Model/Client.class
+ru/itis/MainForServer.class
+ru/itis/ClientThread.class
+ru/itis/EchoServerSocket.class

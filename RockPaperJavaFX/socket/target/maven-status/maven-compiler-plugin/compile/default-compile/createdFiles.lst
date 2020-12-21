@@ -1,0 +1,7 @@
+ru/itis/sockets/GameReceiveTask.class
+ru/itis/sockets/ReceiveMessageTask.class
+ru/itis/sockets/SocketClient.class
+ru/itis/controllers/MainController.class
+ru/itis/controllers/GameController.class
+ru/itis/view/View.class
+ru/itis/application/MainApplication.class

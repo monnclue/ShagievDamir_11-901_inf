@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<Pane style="-fx-background-color: #202020;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.itis.controllers.MainController">
+   <children>
+      <AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0">
+         <prefWidth>600.0</prefWidth>
+         <children>
+            <Button fx:id="helloButton" layoutX="381.0" layoutY="261.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="52.0" style="-fx-background-color: black; -fx-border-color: beige; -fx-border-radius: 10; -fx-background-radius: 10;" text="Ок" textFill="#bfbfbf" />
+            <Label fx:id="helloLabel" alignment="CENTER" layoutX="181.0" layoutY="217.0" prefHeight="38.0" prefWidth="252.0" style="-fx-border-radius: 10; -fx-border-color: beige;" text="Привет!  Введите ник:" textAlignment="CENTER" textFill="#bfbfbf" wrapText="true" />
+            <TextField fx:id="messagesTextField" alignment="CENTER" layoutX="181.0" layoutY="261.0" prefHeight="38.0" prefWidth="196.0" style="-fx-background-color: black; -fx-border-radius: 10; -fx-background-radius: 10; -fx-border-color: beige; -fx-text-fill: #bfbfbf#bfbfbf;" />
+            <Button fx:id="startGameButton" layoutX="181.0" layoutY="305.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="252.0" style="-fx-background-color: black; -fx-border-color: beige; -fx-border-radius: 10; -fx-background-radius: 10;" text="Начать игру" textFill="#bfbfbf" />
+            <ImageView fitHeight="72.0" fitWidth="72.0" layoutX="325.0" layoutY="128.0" style="-fx-rotate: -50; -fx-scale-y: 0.5; -fx-scale-x: 0.5;">
+               <image>
+                  <Image url="@../images/270a-1f3fb.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="87.0" fitWidth="87.0" layoutX="270.0" layoutY="120.0" style="-fx-scale-y: 0.5; -fx-scale-x: 0.5;">
+               <image>
+                  <Image url="@../images/270c-1f3fb.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="83.0" fitWidth="82.0" layoutX="222.0" layoutY="122.0" style="-fx-rotate: 50; -fx-scale-x: 0.5; -fx-scale-y: 0.5;">
+               <image>
+                  <Image url="@../images/1f91a-1f3fb.png" />
+               </image>
+            </ImageView>
+            <Text fill="#dadada" fontSmoothingType="LCD" layoutX="116.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Камень, ножницы, бумага" textAlignment="CENTER" wrappingWidth="392.74272768199694">
+               <font>
+                  <Font name="Arial Bold" size="30.0" />
+               </font>
+            </Text>
+         </children>
+      </AnchorPane>
+   </children>
+</Pane>

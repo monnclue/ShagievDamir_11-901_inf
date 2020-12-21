@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="anchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.itis.controllers.GameController">
+   <children>
+      <Pane fx:id="justPane" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #202020 #202020;">
+         <children>
+            <Text fx:id="oppNameText" fill="#cdcdcd" layoutX="351.0" layoutY="112.0" strokeType="OUTSIDE" strokeWidth="0.0" text="  Подбор..." textAlignment="CENTER" wrappingWidth="203.2060546875">
+               <font>
+                  <Font name="Arial Bold" size="11.0" />
+               </font>
+            </Text>
+            <Text fx:id="myDescription" fill="#cdcdcd" layoutX="174.0" layoutY="345.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Сделайте выбор. Ваше время может остановиться в любой момент" textAlignment="CENTER" wrappingWidth="252.89910888671875">
+               <font>
+                  <Font name="Arial Bold" size="14.0" />
+               </font>
+            </Text>
+            <Text fx:id="myText" fill="#cdcdcd" layoutX="32.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Вы" textAlignment="CENTER" wrappingWidth="203.2060546875">
+               <font>
+                  <Font name="Arial Bold" size="19.0" />
+               </font>
+            </Text>
+            <Text fx:id="oppText" fill="#cdcdcd" layoutX="351.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Соперник" textAlignment="CENTER" wrappingWidth="203.2060546875">
+               <font>
+                  <Font name="Arial Bold" size="19.0" />
+               </font>
+            </Text>
+            <ImageView fx:id="myPaper" layoutX="111.0" layoutY="145.0" opacity="0.0" style="-fx-rotate: 35; -fx-scale-y: 0.7; -fx-scale-x: 0.7;">
+               <image>
+                  <Image url="@../images/1f91a-1f3fb.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="myRock" layoutX="111.0" layoutY="145.0" opacity="0.0" style="-fx-rotate: 35; -fx-scale-y: 0.7; -fx-scale-x: 0.7;">
+               <image>
+                  <Image url="@../images/270a-inverted.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="myScissors" layoutX="111.0" layoutY="144.0" opacity="0.0" style="-fx-rotate: 35; -fx-scale-y: 0.7; -fx-scale-x: 0.7;">
+               <image>
+                  <Image url="@../images/270c-1f3fb.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="oppPaper" layoutX="330.0" layoutY="145.0" opacity="0.0" style="-fx-rotate: -35; -fx-scale-y: 0.7; -fx-scale-x: 0.7;">
+               <image>
+                  <Image url="@../images/1f91a-1f3fb.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="oppRock" layoutX="330.0" layoutY="145.0" opacity="0.0" style="-fx-rotate: -35; -fx-scale-y: 0.7; -fx-scale-x: 0.7;">
+               <image>
+                  <Image url="@../images/270a-1f3fb.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="oppScissors" layoutX="330.0" layoutY="145.0" opacity="0.0" style="-fx-rotate: -35; -fx-scale-y: 0.7; -fx-scale-x: 0.7;">
+               <image>
+                  <Image url="@../images/270c-1f3fb.png" />
+               </image>
+            </ImageView>
+            <Text fx:id="endGame" fill="#cdcdcd" layoutX="199.0" layoutY="169.0" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Время остановилось. " textAlignment="CENTER" wrappingWidth="203.2060546875">
+               <font>
+                  <Font name="Arial Bold" size="19.0" />
+               </font>
+            </Text>
+            <Text fx:id="whoWon" fill="#cdcdcd" layoutX="199.0" layoutY="239.0" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Победа!" textAlignment="CENTER" wrappingWidth="203.2060546875">
+               <font>
+                  <Font name="Arial Bold" size="19.0" />
+               </font>
+            </Text>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
