@@ -1,0 +1,33 @@
+.dark-mode {
+    filter: invert(85%);
+    background-color: #3a3a3a;
+}
+
+.dark-mode img{
+    filter: invert(100%);
+}
+
+.dark-mode #categories_box{
+    color:black
+}
+
+.dark-mode #catTrId{
+    background-color: #f5f5f5;
+}
+
+.dark-mode #not-found-promo{
+    filter: invert(100%);
+}
+
+.dark-mode #found-promo{
+    filter: invert(100%);
+}
+
+input:-webkit-autofill {
+    filter: invert(1);
+    box-shadow:inset 0 0 0 1000px #fff;
+}
+
+.dark-mode #empty {
+    filter: invert(100%)
+}
